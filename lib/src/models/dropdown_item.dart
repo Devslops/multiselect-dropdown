@@ -8,6 +8,7 @@ class DropdownItem<T> {
   /// The [disabled] parameters are optional and default to false.
   DropdownItem({
     required this.label,
+    this.subTitle,
     required this.value,
     this.selected,
     this.disabled = false,
@@ -23,6 +24,7 @@ class DropdownItem<T> {
   factory DropdownItem.fromMap(Map<String, dynamic> map) {
     return DropdownItem<T>(
       label: map['label'] as String? ?? '',
+      subTitle: map['sub_title'] as String? ?? '',
       value: map['value'] as T,
       disabled: map['disabled'] as bool? ?? false,
       selected: map['selected'] as bool? ?? false,
@@ -31,6 +33,9 @@ class DropdownItem<T> {
 
   /// The label of the dropdown item.
   final String label;
+
+  /// The subTitle of the dropdown item.
+  final String? subTitle;
 
   /// The value associated with the dropdown item.
   final T value;
@@ -51,6 +56,7 @@ class DropdownItem<T> {
   Map<String, dynamic> toMap() {
     return {
       'label': label,
+      'sub_title': subTitle,
       'value': value,
       'disabled': disabled,
       'selected': selected,
@@ -62,7 +68,7 @@ class DropdownItem<T> {
 
   @override
   String toString() {
-    return 'ValueItem(label: $label, value: $value, disabled: $disabled, selected: $selected)';
+    return 'ValueItem(label: $label, subTitle: $subTitle, value: $value, disabled: $disabled, selected: $selected)';
   }
 
   @override
@@ -71,6 +77,7 @@ class DropdownItem<T> {
 
     return other is DropdownItem<T> &&
         other.label == label &&
+        other.subTitle == subTitle &&
         other.value == value &&
         other.disabled == disabled &&
         other.selected == selected;
@@ -78,18 +85,24 @@ class DropdownItem<T> {
 
   @override
   int get hashCode =>
-      label.hashCode ^ value.hashCode ^ disabled.hashCode ^ selected.hashCode;
+      label.hashCode ^
+      subTitle.hashCode ^
+      value.hashCode ^
+      disabled.hashCode ^
+      selected.hashCode;
 
   /// Creates a copy of the [DropdownItem] instance with the specified properties.
   ///
   /// If any of the properties are not provided, the corresponding properties of the original instance will be used.
   DropdownItem<T> copyWith({
     String? label,
+    String? subTitle,
     T? value,
     bool? disabled,
   }) {
     return DropdownItem<T>(
       label: label ?? this.label,
+      subTitle: subTitle ?? this.subTitle,
       value: value ?? this.value,
       disabled: disabled ?? this.disabled,
       selected: selected ?? this.selected,

@@ -2,6 +2,12 @@ part of '../multi_dropdown.dart';
 
 /// Controller for the multiselect dropdown.
 class MultiSelectController<T> extends ChangeNotifier {
+  ///Controller constructor
+  MultiSelectController({
+    this.onPopupClose,
+    this.onClearAll,
+  });
+
   /// a flag to indicate whether the controller is initialized.
   bool _initialized = false;
 
@@ -53,6 +59,12 @@ class MultiSelectController<T> extends ChangeNotifier {
     return _selectedItems.contains(item);
   }
 
+  ///Call when popup is closed
+  void Function()? onPopupClose;
+
+  ///Call when popup is clear
+  void Function()? onClearAll;
+
   /// sets the list of dropdown items.
   /// It replaces the existing list of dropdown items.
   void setItems(List<DropdownItem<T>> options) {
@@ -87,6 +99,9 @@ class MultiSelectController<T> extends ChangeNotifier {
     _selectedItems.clear();
     notifyListeners();
     _onSelectionChanged?.call(_selectedValues);
+    if (onPopupClose != null) {
+      onPopupClose!.call();
+    }
   }
 
   /// selects all the items.
@@ -189,6 +204,9 @@ class MultiSelectController<T> extends ChangeNotifier {
 
     _open = false;
     notifyListeners();
+    if (onPopupClose != null) {
+      onPopupClose!.call();
+    }
   }
 
   // ignore: use_setters_to_change_properties

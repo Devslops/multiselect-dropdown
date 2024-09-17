@@ -194,17 +194,25 @@ class _Dropdown<T> extends StatelessWidget {
         : dropdownController.isItemSelected(option)
             ? dropdownItemDecoration.showSelectIcon ?? true
                 ? dropdownItemDecoration.selectedIcon
-                : null
-            : null;
+                : dropdownItemDecoration.unSelectedIcon
+            : dropdownItemDecoration.unSelectedIcon;
 
     return Ink(
       child: ListTile(
         title: Text(option.label),
+        subtitle: option.subTitle != null
+            ? Text(
+                option.subTitle!,
+                style: const TextStyle(color: Colors.grey),
+              )
+            : null,
         trailing: trailing,
         dense: true,
         autofocus: true,
         enabled: !option.disabled,
-        selected: dropdownController.isItemSelected(option),
+        selected: ((dropdownItemDecoration.highlightSelected ?? true) &&
+                dropdownController.isItemSelected(option)) ||
+            dropdownController.selectedItems.length == maxSelections,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         focusColor: dropdownItemDecoration.backgroundColor?.withAlpha(100),
         selectedColor: dropdownItemDecoration.selectedTextColor ??
