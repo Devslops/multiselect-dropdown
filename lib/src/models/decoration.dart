@@ -291,6 +291,7 @@ class ChipDecoration {
     this.labelStyle,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
     this.wrap = true,
+    this.withClearIcon = true,
   });
 
   /// The icon to display for deleting a chip.
@@ -316,6 +317,9 @@ class ChipDecoration {
 
   /// The border radius of the chip.
   final BorderRadiusGeometry borderRadius;
+
+  /// The border radius of the chip.
+  final bool? withClearIcon;
 
   /// Whether to wrap or not
   ///
