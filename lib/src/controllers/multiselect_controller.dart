@@ -99,6 +99,9 @@ class MultiSelectController<T> extends ChangeNotifier {
     _selectedItems.clear();
     notifyListeners();
     _onSelectionChanged?.call(_selectedValues);
+    if (onClearAll != null) {
+      onClearAll!.call();
+    }
     if (onPopupClose != null) {
       onPopupClose!.call();
     }
@@ -216,7 +219,7 @@ class MultiSelectController<T> extends ChangeNotifier {
 
   // sets the search query.
   // The [query] parameter is the search query.
-  void _setSearchQuery(String query) {
+  void setSearchQuery(String query) {
     _searchQuery = query;
     if (_searchQuery.isEmpty) {
       _filteredItems = List.from(_items);

@@ -112,6 +112,7 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
     this.maxSelections = 0,
     this.selectedItemBuilder,
     this.focusNode,
+    this.focusAfterInit,
     this.onSelectionChange,
     this.onSearchChange,
     this.closeOnBackButton = false,
@@ -165,6 +166,7 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
     this.maxSelections = 0,
     this.selectedItemBuilder,
     this.focusNode,
+    this.focusAfterInit,
     this.onSelectionChange,
     this.onSearchChange,
     this.closeOnBackButton = false,
@@ -233,6 +235,9 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
   /// The focus node for the dropdown.
   final FocusNode? focusNode;
 
+  /// Focus dropdown after initialization
+  final bool? focusAfterInit;
+
   /// The future request for the dropdown items.
   final FutureRequest<T>? future;
 
@@ -259,10 +264,10 @@ class MultiDropdown<T extends Object> extends StatefulWidget {
   final TextEditingController? searchEditingController;
 
   @override
-  State<MultiDropdown<T>> createState() => _MultiDropdownState<T>();
+  State<MultiDropdown<T>> createState() => MultiDropdownState<T>();
 }
 
-class _MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
+class MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
   final LayerLink _layerLink = LayerLink();
 
   final OverlayPortalController _portalController = OverlayPortalController();
@@ -291,6 +296,11 @@ class _MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
     _initializeController();
   }
 
+  void refreshDropdown() {
+    _dropdownController.items.clear();
+    _initializeController();
+  }
+
   Future<void> _initializeController() async {
     if (_dropdownController.isDisposed) {
       throw StateError('DropdownController is disposed');
@@ -305,6 +315,9 @@ class _MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
       _dropdownController
         .._initialize()
         ..setItems(widget.items);
+      if (widget.focusAfterInit == true) {
+        _dropdownController.openDropdown();
+      }
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -351,7 +364,7 @@ class _MultiDropdownState<T extends Object> extends State<MultiDropdown<T>> {
       _handleFuture(_searchEditingController.text, 1);
       _dropdownController.page = 1;
     } else {
-      _dropdownController._setSearchQuery(_searchEditingController.text);
+      _dropdownController.setSearchQuery(_searchEditingController.text);
     }
   }
 
